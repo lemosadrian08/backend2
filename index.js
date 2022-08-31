@@ -31,9 +31,11 @@ class Contenedor {
             contenidoJson.forEach(element => {
                 if(element.id==id){
                     contenidoExtraidodelArray=element
+                    return contenidoExtraidodelArray
+                }else{
+                    console.log("el id no existe");
                 }
             });
-            return contenidoExtraidodelArray
         }
         catch(error){
             console.log(error.message);
@@ -54,11 +56,11 @@ class Contenedor {
 
     async deleteById(id){
         try{
-            let contenido = await fs.readFile(`./${this.name}`,'utf-8');
-            let contenidoJson = JSON.parse(contenido)
-            console.log(id);
-            let nuevo = contenidoJson.filter((el)=>el.id!=id)
-            return nuevo
+            const contenido = await fs.readFile(`./${this.name}`,'utf-8');
+            const contenidoJson = JSON.parse(contenido)
+            const nuevo = contenidoJson.filter((el)=>el.id!=id)
+
+            await fs.writeFile(`./${this.name}`, JSON.stringify(nuevo))
         }
         catch(error){
             console.log(error.message);
@@ -66,7 +68,8 @@ class Contenedor {
     }
     async deleteAll(){
         try{
-            
+            const nuevo = []
+            await fs.writeFile(`./${this.name}`, nuevo)
         }
         catch(error){
             console.log(error.message);
@@ -77,17 +80,18 @@ class Contenedor {
 
 let contenedor1 = new Contenedor ("productos.json")
 
-const newInfo = {
+const newInfo = [{
+    
         "id":1,
         "title":"It",
         "price":50
-}
+}]
 
 contenedor1.save(newInfo).then( resolve=>{
     console.log(resolve);
 })
 
-/* contenedor1.getById(1).then(resolve=>{
+/* contenedor1.getById(4).then(resolve=>{
     console.log(resolve);
 }); */
 
@@ -98,3 +102,5 @@ contenedor1.save(newInfo).then( resolve=>{
 /* contenedor1.deleteById(3).then(resolve=>{
     console.log(resolve);
 }); */
+/* 
+contenedor1.deleteAll() */
